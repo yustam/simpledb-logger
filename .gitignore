@@ -1,0 +1,4 @@
+.idea/
+.gradle/
+simpledb-appender/target/
+logging-sample/target/
