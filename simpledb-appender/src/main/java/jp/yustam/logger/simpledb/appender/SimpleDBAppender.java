@@ -7,6 +7,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
 import com.amazonaws.services.simpledb.model.*;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
@@ -120,7 +121,7 @@ public class SimpleDBAppender extends AppenderSkeleton implements Appender {
             if (event.getThrowableInformation() != null) {
                 Throwable ex = event.getThrowableInformation().getThrowable();
                 attrs.add(new ReplaceableAttribute("ErrorClass", ex.getClass().getName(), false));
-                attrs.add(new ReplaceableAttribute("ErrorMessage", ex.getMessage(), false));
+                attrs.add(new ReplaceableAttribute("ErrorMessage", StringUtils.defaultString(ex.getMessage()), false));
                 int numError = 0;
                 for (StackTraceElement trace : ex.getStackTrace()) {
                     attrs.add(new ReplaceableAttribute("ErrorTrace", (numError++) + "_" + trace.toString(), false));
@@ -128,7 +129,7 @@ public class SimpleDBAppender extends AppenderSkeleton implements Appender {
                 Throwable rootCause = ExceptionUtils.getRootCause(ex);
                 if (rootCause != null) {
                     attrs.add(new ReplaceableAttribute("CauseClass", rootCause.getClass().getName(), false));
-                    attrs.add(new ReplaceableAttribute("CauseMessage", rootCause.getMessage(), false));
+                    attrs.add(new ReplaceableAttribute("CauseMessage", StringUtils.defaultString(rootCause.getMessage()), false));
                     int numCause = 0;
                     for (StackTraceElement trace : rootCause.getStackTrace()) {
                         attrs.add(new ReplaceableAttribute("CauseTrace", (numCause++) + "_" + trace.toString(), false));
